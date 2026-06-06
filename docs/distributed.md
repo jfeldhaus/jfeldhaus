@@ -1,10 +1,6 @@
 # Distributed Systems
 
-The complex behavior of distributed systems is challenging to understand. The images below have been used to discover the state of these systems at different granularities.
-
-### Database Nodes
-
-------------------------------------------------------------------------
+## Database Nodes
 
 The network graph below was generated using data from a distributed database. Each of the blue circles is a workload process connected to one of the database nodes. And each database node has a corresponding replica node to ensure fault tolerance. This is a healthy system where the workload is evenly distributed and every node is available.
 
@@ -14,9 +10,7 @@ In contrast, the graph below depicts a system experiencing severe problems where
 
 ![](../images/nodes-2.png)
 
-### Distributed Transactions
-
-------------------------------------------------------------------------
+## Distributed Transactions
 
 The graphs below indicate which nodes (x axis) are associated with particular transactions (y axis). The left hand graph depicts a serious problem where transactions unnecessarily and inefficiently access all nodes in the system. The right hand graph depicts the same scenario after the problem was fixed. Only the nodes required to fulfill the request are accessed resulting in improved in performance.
 
