@@ -17,5 +17,3 @@ This portfolio contains examples of applications, testing tools, data visualizat
 - [Distributed Systems](docs/distributed.md)
 
 - [Code Samples](docs/code.md)
-
-I am open to Senior Software Engineer, Database Engineer, Performance Engineer, Developer Tools Engineer, and related technical roles.
