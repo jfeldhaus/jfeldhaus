@@ -6,7 +6,7 @@ Welcome. I am a software engineer with extensive experience in database technolo
 
 Throughout my career, I have designed and developed database drivers, testing frameworks, diagnostic tools, and data analysis solutions using Java, C, C#, Python, R, and SQL. My work has focused on helping teams understand, measure, and improve the performance, scalability, and reliability of complex software systems.
 
-This portfolio contains examples of applications, testing tools, data visualizations, and technical investigations that demonstrate my approach to solving challenging engineering problems.
+This portfolio contains examples of applications, testing tools, data visualizations, and technical investigations that demonstrate my approach to solving difficult engineering problems.
 
 - [Performance](docs/performance.md)
 
@@ -17,3 +17,5 @@ This portfolio contains examples of applications, testing tools, data visualizat
 - [Distributed Systems](docs/distributed.md)
 
 - [Code Samples](docs/code.md)
+
+I am open to Senior Software Engineer, Database Engineer, Performance Engineer, Developer Tools Engineer, and related technical roles.
