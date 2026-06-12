@@ -16,7 +16,7 @@ The graphs below indicate which nodes (x axis) are associated with particular tr
 
 ![](../images/global-txn.png)
 
-These graphs depict the same problem, but at the individual transaction level. On the left hand graph, when an application executes the UPDATE statement then all nodes in the system are unnecessarily accessed. The right hand graph shows how the application transaction can be modified using a SELECT statement to avoid the problem and improve performance. This optimization was eventually implemented in the database so that applications only need to execute the previously inefficient UPDATE statement.
+These graphs depict the same problem as above, but at the individual transaction level. On the left hand graph, when an application executes the UPDATE statement then all nodes in the system are unnecessarily accessed. The right hand graph shows how the application transaction can be modified using a SELECT statement to avoid the problem and improve performance. This optimization was eventually implemented in the database so that applications only need to execute the previously inefficient UPDATE statement.
 
 ![](../images/global-idx.png)
 

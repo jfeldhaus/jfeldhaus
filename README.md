@@ -2,7 +2,7 @@
 
 ### Senior Software Engineer
 
-Welcome to my portfolio. The page links below provide examples of the applications that I have developed and visualizations of data collected over a wide variety of projects. I have extensive experience with database systems including the development of database drivers and the application of advanced techniques for performance, stress, load and functional testing. Data analysis, including AI assisted analysis, is a key component of my work.
+Welcome. As an engineer at Oracle, I have extensive experience with database technologies and the development of database drivers in Java , C, C# and R. I also developed software for performance, stress, load and functional testing of database systems, including distributed databases. Data analysis, including AI assisted analysis, is a key component of my work. The links below provide examples of applications that I have developed and visualizations of data collected over a wide variety of projects.
 
 - [Performance](docs/performance.md)
 

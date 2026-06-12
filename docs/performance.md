@@ -2,7 +2,7 @@
 
 ## AWS Databases
 
-For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This result is interesting because the serverless Aurora database, based on the AWS documentation, was expected to out perform the RDS version of PostgreSQL.
+For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This test was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS.
 
 ![](../images/aws-tps-postgres.png)
 
@@ -18,7 +18,7 @@ This plot uses the same data set as above, but instead of a time series, the dat
 
 ## Transaction Response Performance
 
-This plot shows the average transaction response times for an application with 16 workload threads. In this case query transactions (blue) perform best followed by delete (red) and then insert/update (green) transaction types.
+This plot shows the average transaction response times for an application with 16 workload threads. In this case query transactions perform best, as expected, followed by delete and then insert/update transaction types.
 
 ![](../images/vcn-response.png)
 
