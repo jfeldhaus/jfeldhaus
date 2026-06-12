@@ -1,6 +1,6 @@
 # Code Samples
 
-I write clean, well documented and resilient code. Although I use AI regularly in my work, these code samples are my own. They have not been touched by AI tools.
+I write clean, well documented and resilient code. Although I use AI regularly in my work, these code samples have not been altered by AI tools.
 
 - [SQL](../code/reports.sql) - This is a set of complex SQL analytic queries demonstrating the use of advanced features including window functions and grouping operations.
 
