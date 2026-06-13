@@ -2,7 +2,7 @@
 
 ## AWS Databases
 
-For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This test was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS.
+For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This [test](https://github.com/jfeldhaus/awsbench) was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS.
 
 ![](../images/aws-tps-postgres.png)
 
