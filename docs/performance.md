@@ -2,7 +2,7 @@
 
 ## AWS Databases
 
-For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This [test](https://github.com/jfeldhaus/awsbench) was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS.
+For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This [test](https://github.com/jfeldhaus/awsbench) was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS. Performance tests like this one reveal how applications scale as the load increases.
 
 ![](../images/aws-tps-postgres.png)
 
@@ -12,19 +12,19 @@ This plot was created using data collected during a connection pool test for an 
 
 ![](../images/conn-pool.png)
 
-This plot uses the same data set as above, but instead of a time series, the data is compared using box plots which clearly show how performance varies for each configuration. These box plots have long lower tails since workload performance improved over time.
+This plot uses the same data set as above, but instead of a time series, the data is compared using box plots which clearly show how performance varies for each configuration. These box plots have long lower tails since workload performance improved over time. Tests like this one help developers determine optimal configurations for their applications.
 
 ![](../images/conn-pool-2.png)
 
-## Transaction Response Performance
+## Transaction Response Times
 
-This plot shows the average transaction response times for an application with 16 workload threads. In this case query transactions perform best, as expected, followed by delete and then insert/update transaction types.
+This plot shows the average transaction response times for an application with 16 workload threads. In this case query transactions perform best, as expected, followed by delete and then insert/update transaction types. This type of test helps developers determine where they should spend their time when optimizing transactions.
 
 ![](../images/vcn-response.png)
 
-## Distributed Database Performance
+## Distributed Systems
 
-These box plots show how a workload executing on each node of a distributed system perform over a long duration load test. The nodes are ordered from left to right based on the median TPS measurement for each node.
+These box plots show how a workload executing on each node of a 64 node distributed system perform over a long duration load test. The nodes are ordered from left to right based on the median TPS measurement for each node. Visualization techniques like this one help developers understand, at a high level, how the entire system performs, even with a large number of nodes.
 
 ![](../images/grid-tps.png)
 
