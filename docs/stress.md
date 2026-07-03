@@ -14,6 +14,12 @@ This graph visualizes failure event data collected during a complex stress test 
 
 ![](../images/events.png)
 
+## Resources
+
+Data collection of system performance and resource usage is a basic requirement for effective stress tests. Resource leaks, like the ones below (shaded areas), can be ticking time bombs in production systems.
+
+![](../images/pages.png)
+
 ## Observability
 
 The interactive application below is used to monitor the status of complex simulations of telecommunications, trading and e-commerce workloads in near real time. It provides many different views of metrics and unstructured data generated over hours, days or weeks. This allows even the most obscure problems to be identified and traced back to their origins.
