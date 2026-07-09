@@ -1,8 +1,10 @@
 # Performance
 
+Poor performance can ruin the value of otherwise high quality software. The studies below show how performance changes under various configurations and conditions, allowing developers to use their limited time wisely to optimize different operations.
+
 ## AWS Databases
 
-For two PostgreSQL compatible AWS databases, the plot below measures how throughput changes as the number of workload threads increase for a simple OLTP workload. This [test](https://github.com/jfeldhaus/awsbench) was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS. Performance tests like this one reveal how applications scale as the load increases.
+For two PostgreSQL compatible AWS databases, the plot below depicts how transaction throughput changes as the number of threads increase for a simple OLTP workload. This [test](https://github.com/jfeldhaus/awsbench) was executed by deploying a distributed workload across docker container instances managed by the Elastic Container Service (ECS) in AWS. Performance tests like this one reveal how applications scale.
 
 ![](../images/aws-tps-postgres.png)
 

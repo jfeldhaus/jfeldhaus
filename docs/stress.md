@@ -10,7 +10,7 @@ This graph depicts the write progression of database transaction logs during a w
 
 ## Events
 
-This graph visualizes failure event data collected during a complex stress test of a distributed system. These behavior patterns can reveal how to isolate failing nodes more effectively.
+This graph visualizes failure event data collected during a complex stress test of a distributed system. Capturing and visualizing failure patterns can help developers design systems that isolate the effects of failing nodes from the remaining healthy nodes.
 
 ![](../images/events.png)
 
