@@ -10,6 +10,6 @@ I write clean, well documented and resilient code. Although I use AI regularly i
 
 - [C](../code/dst.c) - Programming C applications can be quite complex. This is a library that wraps ODBC SDK calls using a simpler interface.
 
-- [C#](../code/ConnTest.cs) - This is a set of unit style tests for database connections that were used during development of the ODP.NET driver for the TimesTen database. This project used a Test Driven Development (TDD) approach.
+- [C#](../code/ConnTest.cs) - This is a set of unit style tests for database connections that were used during development of a .NET driver for an in-memory relational database. This project used a Test Driven Development (TDD) approach.
 
 - [R](../code/collect.R) - This server code is responsible for collecting various data sets associated with a distributed database system running on remote hosts. The collected data is transferred to a database for later analysis. The R language was chosen for this project due to its excellent support for data management workflows.
