@@ -4,7 +4,7 @@ I write clean, well documented and resilient code. Although I use AI regularly i
 
 - [SQL](../code/reports.sql) - This is a set of complex SQL analytic queries demonstrating the use of advanced features including window functions and grouping operations.
 
-- [Java](../code/VCNThread.java) - This is the implementation of a workload thread for a multithreaded performance test that executes PL/SQL calls against a database.
+- [Java](../code/TradeThread.java) - This is the implementation of a workload manager class for a multithreaded performance test.
 
 - [Python](../code/compare.py) - This is a simple command line utility that allows users to compare two different database tables. If differences are found the code prints the row and column of the first difference.
 
