@@ -1,5 +1,6 @@
 
 *.html
+*.json
 
 .Rproj.user
 .Rhistory
