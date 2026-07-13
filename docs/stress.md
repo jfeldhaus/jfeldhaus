@@ -1,10 +1,10 @@
 # Stress Testing
 
-The images below are from a database stress testing framework that automates the collection of a wide range of data across multiple nodes while managing the execution of complex distributed workloads. The goal is to detect anything that could impact the correct and efficient functioning of the system under extreme conditions.
+The images below are from a database stress testing framework I designed and built that automates the collection of a wide range of data across multiple nodes while managing the execution of complex distributed workloads. The goal is to detect anything that could impact the correct and efficient functioning of the system under extreme conditions.
 
 ## Anomaly Detection
 
-This graph depicts the write progression of database transaction logs during a workload simulation for a database composed of 58 compute nodes. The simulation revealed an initially subtle, but ultimately fatal problem where nodes 43 and 44 failed to purge log files which resulted in disk space exhaustion.
+This graph depicts the write progression of database transaction logs during a workload simulation for a database composed of 58 compute nodes. The simulation revealed an initially subtle, but potentially fatal problem where nodes 43 and 44 failed to purge log files which could result in disk space exhaustion.
 
 ![Small multiples chart of transaction log growth across 58 compute nodes, with nodes 43 and 44 circled to highlight log holds that never released](../images/grid-log-holds.png)
 
@@ -28,7 +28,7 @@ Three of the five tables (`CALL_FORWARDING`, `SPECIAL_FACILITY`, `SUBSCRIBER`) s
 
 ## Observability
 
-The interactive application below is used to monitor the status of complex simulations of telecommunications, trading and e-commerce workloads in near real time. It provides many different views of metrics and unstructured data generated over hours, days or weeks. This allows even the most obscure problems to be identified and traced back to their origins.
+The interactive application below, which I designed and built, is used to monitor the status of complex simulations of telecommunications, trading and e-commerce workloads in near real time. It provides many different views of metrics and unstructured data generated over hours, days or weeks. This allows even the most obscure problems to be identified and traced back to their origins.
 
 ![Screenshot of a test run viewer application showing a database workload timeline and an online defragmentation chart over a four hour test window](../images/test-monitoring.jpg)
 
