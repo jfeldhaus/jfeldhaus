@@ -68,7 +68,6 @@ public class TradeManager
   
 
   // OPERATIONS
-  
   // ----------------------------------------
   // TradeManager ()
   public TradeManager (String url, int txns, String txnCodes, String txnProbs,
@@ -117,9 +116,8 @@ public class TradeManager
     
     return;
   }
-  
-  
-  
+
+
   // ----------------------------------------
   // run ()
   // Begin test procedure
@@ -186,10 +184,8 @@ public class TradeManager
 
     return status;
   }
-  
-  
 
-  
+
   // ----------------------------------------
   // dispatchThreads ()
   // This method is responsible for creating and starting threads
@@ -249,291 +245,7 @@ public class TradeManager
 
     return status;
   }
-  
 
-  // ----------------------------------------
-  // fetchTableRowCounts ()
-  // Iterates though all user tables and counts the rows, the
-  // results are saved in m_rows
-  private void fetchTableRowCounts () 
-    throws SQLException
-  {
-    Connection conn = null;
-    
-    Statement stmtTables = null;
-    Statement stmtRowCount = null;
-
-    ResultSet rsTables = null;
-    ResultSet rsRowCount = null;
-
-    int rowCount = 0;
-    String tableName = null;
-    String selectQuery = null;
-
-    log ("TradeManager", "Fetching table row counts ...");
-
-    conn = checkoutConn ("TradeManager");
-
-    stmtTables = conn.createStatement ();
-    stmtRowCount = conn.createStatement ();
-
-    rsTables = stmtTables.executeQuery 
-      ("SELECT TABLE_NAME FROM USER_TABLES");
-
-    while (rsTables.next ())
-    {
-
-      tableName = rsTables.getString (1);
-      selectQuery = "SELECT COUNT (*) FROM " + tableName;
-
-      rsRowCount = stmtRowCount.executeQuery (selectQuery); 
-
-      rsRowCount.next ();
-      rowCount = rsRowCount.getInt (1);
-      rsRowCount.close ();
-
-      m_rows.put (tableName, rowCount);
-    }
-
-    stmtRowCount.close ();
-    stmtTables.close ();
-
-    checkinConn ("TradeManager", conn);
-    
-    return;
-  }
-
-
-  // ----------------------------------------
-  // getTableRowCount ()
-  // Returns the number of rows in the given table
-  public int getTableRowCount (String tableName) 
-  {
-    return m_rows.get (tableName);
-  }
-
-
-  // ----------------------------------------
-  // createDataTables ()
-  // Creates copies of the trade tables in the user's account
-  private void createDataTables () 
-    throws SQLException
-  {
-
-    log ("TradeManager", "Creating data tables ...");
-
-    if (m_convertToJson)
-    {
-      convertToJson ("MARKET_QUOTES_RGN");
-      convertToJson ("INTERNAL_QUOTES_RGN"); 
-      convertToJson ("QUOTE_SUBSCRIPTIONS_RGN"); 
-      convertToJson ("INTERNAL_QUOTE_SUBSCRIPTIONS_RGN"); 
-      convertToJson ("SETTLEMENT_IDS_RGN"); 
-      convertToJson ("RISK_LIMIT_GROUPS_RGN");
-      convertToJson ("RISK_LIMIT_ASSOCIATIONS_RGN");
-      convertToJson ("TRADING_RESTRICTIONS_RGN");
-      convertToJson ("ACCOUNTS_RGN");
-      convertToJson ("PORTFOLIOS_RGN");
-      convertToJson ("TRADING_BOOKS_RGN");
-      convertToJson ("ORDER_EXEC_INFO_RGN");
-      convertToJson ("ORDERS_RGN");
-    }
-
-
-    createDataTable ("CACHE_STATUS", m_initCache, m_cacheSize); 
-    createDataTable ("MARKET_QUOTES_RGN", m_initCache, m_cacheSize); 
-    createDataTable ("INTERNAL_QUOTES_RGN", m_initCache, m_cacheSize); 
-    createDataTable ("QUOTE_SUBSCRIPTIONS_RGN", m_initCache, m_cacheSize); 
-    createDataTable ("INTERNAL_QUOTE_SUBSCRIPTIONS_RGN", m_initCache, m_cacheSize); 
-    createDataTable ("SETTLEMENT_IDS_RGN", m_initCache, m_cacheSize); 
-    createDataTable ("ORDER_LOCK_STATUS", m_initCache, m_cacheSize); 
-    createDataTable ("RISK_LIMIT_GROUPS_RGN", m_initCache, m_cacheSize);
-    createDataTable ("RISK_LIMIT_ASSOCIATIONS_RGN", m_initCache, m_cacheSize);
-    createDataTable ("TRADING_RESTRICTIONS_RGN", m_initCache, m_cacheSize);
-    createDataTable ("ACCOUNTS_RGN", m_initCache, m_cacheSize);
-    createDataTable ("PORTFOLIOS_RGN", m_initCache, m_cacheSize);
-    createDataTable ("TRADING_BOOKS_RGN", m_initCache, m_cacheSize);
-    createDataTable ("ORDER_EXEC_INFO_RGN", m_initCache, m_cacheSize);
-    createDataTable ("ORDERS_RGN", m_initCache, m_cacheSize);
-
-
-
-    return;
-  }
-
-  // ----------------------------------------
-  // createDataTable ()
-  // Creates a data copy of the given table
-  private void createDataTable (String tableName, boolean recreate, 
-    int maxRows)
-    throws SQLException
-  {
-    String dataTableName = tableName + "_DATA";
-    boolean tableExists = false;
-
-    // truncate SQL identifier to 30 chars
-    if (dataTableName.length () > 30)
-      dataTableName = dataTableName.substring (0, 30);
-
-    String dropSql = "DROP TABLE " + dataTableName;
-
-    String createSql = "CREATE TABLE " + dataTableName + " AS " + 
-          "SELECT FIRST " + maxRows + " * FROM " + tableName;
-
-    Connection conn = checkoutConn ("TradeManager");
-
-    DatabaseMetaData dbmd = conn.getMetaData ();
-    ResultSet rs = dbmd.getTables (null, null, dataTableName, null);
-
-    if (rs.next ())
-    {
-      tableExists = true;
-    }
-
-    rs.close ();
-
-
-    // drop the data table
-    if (recreate && tableExists) 
-    {
-      log ("TradeManager", "Dropping data table " + dataTableName + " ...");
-
-      Statement stmt = conn.createStatement ();
-      stmt.executeUpdate (dropSql);
-      stmt.close ();
-
-      tableExists = false;
-    }
-    
-
-    // create the data table
-    if (!tableExists)
-    {
-      log ("TradeManager", "Creating data table " + dataTableName + 
-        " with up to " + maxRows + " rows ...");
-
-      Statement stmt = conn.createStatement ();
-      stmt.executeUpdate (createSql);
-      stmt.close ();
-    } 
-    else
-    {
-      log ("TradeManager", "Data table " + dataTableName + " exists");      
-    }
-
-
-    checkinConn ("TradeManager", conn);
-
-    return;
-  }
-
-// ----------------------------------------
-  // convertToJson ()
-  // Alter the do_json column to the JSON data type
-  private void convertToJson (String tableName)
-    throws SQLException
-  {
-    boolean tableColFound = false;
-    String typeName;
-    String sql;
-    Connection conn = null;
-    Statement stmt = null;
-
-    log ("TradeManager", "Altering table " + tableName + " for the JSON type ...");
-    
-
-    try
-    {
-      conn = checkoutConn ("TradeManager");
-      stmt = conn.createStatement ();
-
-      /* what columns exist? */
-      DatabaseMetaData dbmd = conn.getMetaData ();
-      ResultSet rs = dbmd.getColumns (null, null, tableName, "DO_JSON");
-
-      if (rs.next ())
-        tableColFound = true;
-
-      rs.close ();
-
-      if (!tableColFound)
-      {
-        checkinConn ("TradeManager", conn);
-        log ("TradeManager", "The DO_JSON column was not found");
-        return;
-      }
-
-      // drop the JSON_TEMP column - it may exist from a previous attempt
-      try
-      {
-        sql = "alter table " + tableName + " drop column json_temp";
-        stmt.executeUpdate(sql);
-      }
-      catch (SQLException ex)
-      { /* do nothing */}
-
-
-      /* convert the DO_JSON column to the JSON data type */
-      sql = "alter table " + tableName + " add column json_temp json";
-      stmt.executeUpdate(sql);
-
-      sql = "update " + tableName + " set json_temp = do_json";
-      stmt.executeUpdate(sql);
-
-      sql = "alter table " + tableName + " drop column do_json";
-      stmt.executeUpdate(sql);
-
-      sql = "alter table " + tableName + " add column do_json json";
-      stmt.executeUpdate(sql);
-
-      sql = "update " + tableName + " set do_json = json_temp";
-      stmt.executeUpdate(sql);
-
-      sql = "alter table " + tableName + " drop column json_temp";
-      stmt.executeUpdate(sql);
-    }
-    catch (SQLException ex)
-    {
-      throw ex;
-    }
-    finally
-    {
-      if (conn != null)
-        checkinConn ("TradeManager", conn);
-      
-      if (stmt != null)
-        stmt.close ();
-    }
-
-  }
-
-
-  // ----------------------------------------
-  // cacheDataTables ()
-  // Caches copies of data tables
-  private void cacheDataTables () 
-    throws SQLException
-  {
-
-    cacheTable ("CACHE_STATUS_DATA");
-    cacheTable ("MARKET_QUOTES_RGN_DATA");
-    cacheTable ("INTERNAL_QUOTES_RGN_DATA");
-    cacheTable ("QUOTE_SUBSCRIPTIONS_RGN_DATA");
-    cacheTable ("INTERNAL_QUOTE_SUBSCRIPTIONS_R");
-    cacheTable ("SETTLEMENT_IDS_RGN_DATA");
-    cacheTable ("ORDER_LOCK_STATUS_DATA");
-    cacheTable ("RISK_LIMIT_GROUPS_RGN_DATA");
-    cacheTable ("RISK_LIMIT_ASSOCIATIONS_RGN_DA");
-    cacheTable ("TRADING_RESTRICTIONS_RGN_DATA");
-    cacheTable ("ACCOUNTS_RGN_DATA");
-    cacheTable ("PORTFOLIOS_RGN_DATA");
-    cacheTable ("TRADING_BOOKS_RGN_DATA");
-    cacheTable ("ORDER_EXEC_INFO_RGN_DATA");
-    cacheTable ("ORDERS_RGN_DATA");
-
-
-    return;
-  }
 
   // ----------------------------------------
   // cacheTable ()
@@ -638,38 +350,6 @@ public class TradeManager
     return value;
   }
 
-  // ----------------------------------------
-  // getCachedRow ()
-  // Returns a row as a HashMap from the given table. The row is selected
-  // randomly among the rows in the table.
-  public HashMap<String, Object> getCachedRow (String source, String tableName) 
-  {
-    int targetRowIndex;
-    HashMap<String, Object> row = null;
-
-
-    ArrayList<HashMap<String, Object>> resultList = m_tableCache.get (tableName);
-
-    if (resultList == null || resultList.size () == 0)
-    {
-      return row;
-    }
-
-    log (source, "Getting random row from " + tableName + " ...");
-
-    log (source, "Result set size: " + resultList.size ());
-    targetRowIndex = m_rand.nextInt (resultList.size ());
-
-    row = resultList.get (targetRowIndex);
-
-    log (source, "Row = " + row);
-
-    return row;
-  }
-
-
-
-
 
   // ----------------------------------------
   // buildConnectionPool ()
@@ -727,8 +407,8 @@ public class TradeManager
     
     return conn;
   }
-  
-  
+
+
   // ----------------------------------------
   // checkinConn ()
   // Checks a connection back into the connection pool
@@ -748,103 +428,8 @@ public class TradeManager
     
     return;
   }
-  
-  
-  
-  
-  
-  // ----------------------------------------
-  // log ()
-  // All info messages are directed through here
-  public void log (String source, String message)
-  {
-    
-    if (!m_quiet)
-    {
-      synchronized (this)
-      {
-        System.out.println (source + " : " + message);
-      }
 
-      System.out.flush ();
-    }
 
-    return;
-  }
-
-  // ----------------------------------------
-  // logForce ()
-  // Write an info message even when the test is in quiet mode
-  public synchronized void logForce (String source, String message)
-  {
-
-    System.out.println (source + " : " + message);
-    System.out.flush ();
-
-    return;
-  }
-  
-  // ----------------------------------------
-  // logErr ()
-  // All error messages are directed through here
-  public synchronized void logErr (String source, String message)
-  {
-    
-    System.err.println ("");
-    System.err.println (source + " : " + message);
-    System.err.println ("");
-    
-    System.err.flush ();
-    
-    return;
-  }
-  
-  
-  
-  
-  // -----------------------------------------------------
-  // handleSQLException ()
-  // Reports information on an SQLException object
-  public synchronized void handleSQLException (String source, 
-    java.sql.SQLException ex)
-  {
-    
-    
-    while (ex != null)
-    {
-      logErr (source, "SQLException: " + ex.getMessage ());
-      
-      // print the stack trace
-      ex.printStackTrace ();
-      
-      // if the SQLException message is invalid then throw a fatal
-      // error
-      if (ex.getMessage () == null)
-        throw new java.lang.Error ("Invalid SQLException object.");
-      
-      // get the next exception if one exists
-      ex = ex.getNextException ();
-    }
-    
-    
-    
-    return;
-  }
-
-  // -----------------------------------------------------
-  // handleException ()
-  // Reports information on a generic Exception object
-  public synchronized void handleException (String source, Exception ex)
-  {
-    
-    logErr (source, "Exception: " + ex.getMessage ());
-    
-    // print the stack trace
-    ex.printStackTrace ();
- 
-    return;
-  }
-  
   // -----------------------------------------------------
   // areThreadsAlive ()
   // Returns true if any TradeThread thread in the m_threads
@@ -872,8 +457,8 @@ public class TradeManager
     
     return status;
   }
-  
-  
+
+
   // -----------------------------------------------------
   // didThreadsSucceed ()
   // Returns true if any TradeThread in the m_threads Vector has a FAIL status
@@ -909,16 +494,7 @@ public class TradeManager
     
     return status;
   }
-  
 
-  // ----------------------------------------
-  // setTiming ()
-  // Adds a timing observation for a procedure
-  public synchronized void setTiming (String procedure, long elapsedTime)
-  {
-    m_timingProcs.add (procedure);
-    m_timings.add (elapsedTime);
-  }
 
   // ----------------------------------------
   // calcAvgElapsedTime () 
@@ -941,7 +517,7 @@ public class TradeManager
     return (double) sum / timings.size();
   }
 
-  
+
   // ----------------------------------------
   // reportSummaryStats () 
   // Reports various summary and performance stats
@@ -1092,132 +668,6 @@ public class TradeManager
   }
 
 
-  /* Return a hash map that includes the name of all available transactions */
-  /* and their ids. */
-  public static LinkedHashMap<String, Integer> getDefaultTxnMap ()
-  {
-
-    LinkedHashMap<String, Integer> txnMap = new LinkedHashMap <>();
-
-    txnMap.put ("del_accounts_rgn", 1);
-    txnMap.put ("del_market_quotes_rgn", 2);
-    txnMap.put ("del_order_exec_info_rgn", 3);
-    txnMap.put ("del_portfolios_rgn", 4);
-    txnMap.put ("del_internal_quote_subscriptions_rgn", 5);
-    txnMap.put ("del_internal_quotes_rgn", 6);
-    txnMap.put ("del_settlement_ids_rgn", 7);
-    txnMap.put ("del_quote_subscriptions_rgn", 8);
-    txnMap.put ("del_trading_books_rgn", 9);
-    txnMap.put ("del_risk_limit_groups_rgn", 10);
-    txnMap.put ("del_trading_restrictions_rgn", 11);
-    txnMap.put ("del_risk_limit_associations_rgn", 12);
-    txnMap.put ("put_risk_limit_associations_rgn", 13);
-    txnMap.put ("put_settlement_ids_rgn", 14);
-    txnMap.put ("put_order_exec_info_rgn", 15);
-    txnMap.put ("del_orders_rgn", 16);
-    txnMap.put ("put_internal_quote_subscriptions_rgn", 17);
-    txnMap.put ("put_portfolios_rgn", 18);
-    txnMap.put ("put_quote_subscriptions_rgn", 19);
-    txnMap.put ("put_market_quotes_rgn", 20);
-    txnMap.put ("put_trading_restrictions_rgn", 21);
-    txnMap.put ("put_trading_books_rgn", 22);
-    txnMap.put ("put_risk_limit_groups_rgn", 23);
-    txnMap.put ("put_accounts_rgn", 24);
-    txnMap.put ("put_internal_quotes_rgn", 25);
-    txnMap.put ("put_orders_rgn", 26);
-    txnMap.put ("put_cache_status", 27);
-    txnMap.put ("query_get_market_quote", 28);
-    txnMap.put ("query_get_internal_quote", 29);
-    txnMap.put ("query_get_risk_limit_groups", 30);
-    txnMap.put ("query_get_order", 31);
-    txnMap.put ("query_get_settlement_id", 32);
-
-    return txnMap;
-  }
-
-
-  /* Returns a hash map of transactions and ids based on a comma */
-  /* delimited list of transaction codes. If txnCodes is null then */
-  /* the default set of all transactions is returned. */
-  public LinkedHashMap<String, Integer> getTxnMap (String txnCodes)
-    throws Exception
-  {
-    LinkedHashMap<String, Integer> defaultTxnMap = getDefaultTxnMap ();
-    LinkedHashMap<String, Integer> txnMap = new LinkedHashMap <>();
-
-    // return the default map if txnCodes is null
-    if (txnCodes == null)
-      return defaultTxnMap;
-
-    String[] codes = txnCodes.split (",");
-
-    for (String code : codes)
-    {
-      for (Map.Entry<String, Integer> entry : defaultTxnMap.entrySet()) 
-      {
-        String key = entry.getKey ();
-        int value = entry.getValue ();
-
-        if (value == Integer.parseInt (code))
-        {
-          txnMap.put (key, value);
-        }
-      }
-    }
-
-    // the map must have at least one element
-    if (txnMap.size() == 0)
-    {
-      throw new Exception ("Empty transaction list, check transaction codes");     
-    }
-
-
-    return txnMap;
-  }
-
-  /* Return a hash map that includes the name of all available transactions */
-  /* and their execution probabalities. */
-  public static LinkedHashMap<String, Integer> getDefaultTxnProbMap ()
-  {
-
-    LinkedHashMap<String, Integer> probMap = new LinkedHashMap <>();
-
-    probMap.put ("del_accounts_rgn", 3);
-    probMap.put ("del_market_quotes_rgn", 3);
-    probMap.put ("del_order_exec_info_rgn", 3);
-    probMap.put ("del_portfolios_rgn", 3);
-    probMap.put ("del_internal_quote_subscriptions_rgn", 3);
-    probMap.put ("del_internal_quotes_rgn", 3);
-    probMap.put ("del_settlement_ids_rgn", 3);
-    probMap.put ("del_quote_subscriptions_rgn", 3);
-    probMap.put ("del_trading_books_rgn", 3);
-    probMap.put ("del_risk_limit_groups_rgn", 3);
-    probMap.put ("del_trading_restrictions_rgn", 3);
-    probMap.put ("del_risk_limit_associations_rgn", 3);
-    probMap.put ("put_risk_limit_associations_rgn", 3);
-    probMap.put ("put_settlement_ids_rgn", 3);
-    probMap.put ("put_order_exec_info_rgn", 3);
-    probMap.put ("del_orders_rgn", 3);
-    probMap.put ("put_internal_quote_subscriptions_rgn", 3);
-    probMap.put ("put_portfolios_rgn", 3);
-    probMap.put ("put_quote_subscriptions_rgn", 3);
-    probMap.put ("put_market_quotes_rgn", 3);
-    probMap.put ("put_trading_restrictions_rgn", 3);
-    probMap.put ("put_trading_books_rgn", 3);
-    probMap.put ("put_risk_limit_groups_rgn", 3);
-    probMap.put ("put_accounts_rgn", 3);
-    probMap.put ("put_internal_quotes_rgn", 3);
-    probMap.put ("put_orders_rgn", 3);
-    probMap.put ("put_cache_status", 3);
-    probMap.put ("query_get_market_quote", 3);
-    probMap.put ("query_get_internal_quote", 4);
-    probMap.put ("query_get_risk_limit_groups", 4);
-    probMap.put ("query_get_order", 4);
-    probMap.put ("query_get_settlement_id", 4);
-
-    return probMap;
-  }
-
   // Given a set of transactions, build a probability map that is uniform - that
   // selects transactions with equal probabilities.
   public static LinkedHashMap<String, Integer> buildUniformTxnProbMap (
@@ -1265,75 +715,6 @@ public class TradeManager
 
     return txnProbsMap;
   }
-
-
-
-
-  /* Returns a hash map of transaction probabilities based on a comma */
-  /* delimited list of probabilites summing to 100. If txnProbs is null then */
-  /* the default set of probabilities is returned. */
-  public LinkedHashMap<String, Integer> getTxnProbsMap (
-    LinkedHashMap<String, Integer> txnMap, String txnProbs)
-    throws Exception
-  {
-    LinkedHashMap<String, Integer> txnProbsMap = new LinkedHashMap <>();
-
-    // if txnProbs is null then return a uniform distribution map
-    if (txnProbs == null)
-      return buildUniformTxnProbMap (txnMap);
-
-    String[] probs = txnProbs.split (",");
-
-
-    // the number of probabilities must equal the number of transactions
-    if (probs.length != txnMap.size())
-    {
-      throw new Exception (
-        "The number of transaction probabilites (" + probs.length + 
-        ") does not match the number of transactions (" + txnMap.size() + ")"); 
-    }
-
-    // the probabilities must sum to 100
-    int probSum = 0;
-
-    for (String prob: probs)
-    {
-      probSum += Integer.parseInt (prob);
-    }
-
-    if (probSum != 100)
-    {
-      throw new Exception ("The transaction probabilites sum to " + probSum + 
-        " instead of 100.");
-    }
-
-    int mapCount = txnProbsMap.size();
-    int index = 0;
-
-    for (String prob: probs)
-    {
-      // get the key from txnMap
-      Object [] txnArrayKeys = txnMap.keySet().toArray ();
-        
-      txnProbsMap.put (txnArrayKeys [index].toString(), 
-        Integer.parseInt (prob));
-
-      index ++;
-    }
-
-    // the map must have at least one element
-    if (txnProbsMap.isEmpty ())
-    {
-      throw new Exception ("Empty probability list");     
-    }
-
-
-    return txnProbsMap;
-  }  
-
-
-
-
 
 
 }
