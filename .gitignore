@@ -1,0 +1,10 @@
+
+*.html
+*.json
+
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+jfeldhaus.Rproj
+
