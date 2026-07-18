@@ -28,7 +28,7 @@ This plot shows the average transaction response times, measured with a test har
 
 ![Bar chart of average response times for delete, put, and query transactions, comparing client and direct connection modes](../images/vcn-response.png)
 
-Query transactions respond in well under 100 microseconds, while put (insert/update) transactions run 3-4x slower than delete transactions — making inserts and updates the clearest target for optimization.
+Query transactions respond in well under 100 microseconds, while put (insert/update) transactions run 25-30% slower than delete transactions — making inserts and updates the clearest target for optimization.
 
 ## Distributed Systems
 
