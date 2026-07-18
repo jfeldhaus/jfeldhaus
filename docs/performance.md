@@ -20,7 +20,7 @@ This plot uses the same data set as above, but instead of a time series, the dat
 
 ![Box plots comparing the TPS distribution of the default configuration against three connection pool configurations](../images/conn-pool-2.png)
 
-The default configuration sustains roughly 180,000 TPS with a tight distribution, while the pooled configurations settle 15-30% lower with noticeably wider spread — confirming that pooling traded raw throughput for connection control in this workload.
+Pre-warmed pooling is nearly free: with MIN=MAX=16, pooled throughput lands within \~4% of the default configuration's \~182K TPS with a similarly tight distribution. The cost shows up only when the pool grows lazily under load — the MIN=1 configurations settle \~10% lower with far wider variance, as single-connection increments throttle ramp-up. Pool sizing, not pooling itself, determines the throughput trade.
 
 ## Transaction Response Times
 
