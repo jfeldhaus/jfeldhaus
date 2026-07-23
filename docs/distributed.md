@@ -12,7 +12,7 @@ In contrast, the graph below depicts a system experiencing severe problems where
 
 ## Distributed Transactions
 
-Using the same monitoring tool, the graphs below indicate which nodes (x axis) are associated with particular transactions (y axis). The left hand graph depicts a serious problem where transactions unnecessarily and inefficiently accessed all nodes in the system. The right hand graph depicts the same scenario after the problem was fixed. Only the nodes required to fulfill the request are accessed resulting in improved in performance.
+Using the same monitoring tool, the graphs below indicate which nodes (x axis) are associated with particular transactions (y axis). The left hand graph depicts a serious problem where transactions unnecessarily and inefficiently accessed all nodes in the system. The right hand graph depicts the same scenario after the problem was fixed. Only the nodes required to fulfill the request are accessed resulting in improved performance.
 
 ![](../images/global-txn.png)
 
